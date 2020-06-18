@@ -1,0 +1,33 @@
+{
+    "fName":"Mark",
+    "lName":"Boron",
+    "address":{
+        "city":"London",
+        "country":"UK"
+    },
+    "friends":[{
+        "name":{
+            "fName":"Sam",
+            "lName":"Samuel",
+            "address":{
+                "city":"new york",
+                "country":"US"
+            },
+            "schoolFriend": true,
+            "collegeFriend?": true
+        }
+    }],
+    "citiesVisited":[{
+        "name":"LA",
+        "year":"2020"
+    },
+    {
+        "name":"Bloomington",
+        "year":"2019"
+    }],
+    "address2":{
+        "city":"London",
+        "country":"UK"
+    },
+    "Id":2019
+}

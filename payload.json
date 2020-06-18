@@ -1,0 +1,51 @@
+{
+    "fName":{"title":"Kunal"},
+    "address":{
+        "country":"UK"
+    },
+    "friends":[{
+        "name":{
+            "fName":"Sam",
+            "address":{
+                "city":"new york",
+                "country":"US"
+            },
+            "schoolFriend?": true,
+            "collegeFriend?": "true"
+        }
+    },{
+        "name":{
+            "lName":"Samuel",
+            "address":{
+                "city":"new york",
+                "country":"US"
+            }
+        }
+    },
+    {
+        "name":{
+            "lName":"Samuel",
+            "address":"Houston"
+        }
+    },
+    {
+        "name1":{
+            "lName":"Samuel",
+            "address":{
+                "city":"new york",
+                "country":"US"
+            }
+        }
+    }],
+    "citiesVisited":{
+        "name":"LA",
+        "year":"2020"
+    },
+    "address2":"Spain",
+    "born":{
+        "month":"Jan",
+        "date":1
+    },
+    "Id":"2019",
+    "zip":411057
+}
