@@ -46,6 +46,7 @@ async function compare(){
 }
 
 function checkObjectProperty(master, payload, key, hierarchy, nestedKey){
+    var temp = payload[key]; 
     if(typeof payload[key] === 'undefined'){
         hierarchy.push(nestedKey + " is missing");
     } else if (typeof master[key] === 'object'){
@@ -64,6 +65,12 @@ function checkObjectProperty(master, payload, key, hierarchy, nestedKey){
             var i=0;
             payload[key].forEach(element => {
                 var newPayload = element; 
+
+                if(isPrimitive(newMaster)  &&
+                (typeof newMaster !== typeof newPayload)){
+                    hierarchy.push(nestedKey +"["+i+"]"  + " must be a "+ typeof newMaster);
+                    return;
+                }
                 
                 for(var newKey in newMaster){
                     var newNestedKey = nestedKey+"["+i+"]" +"."+newKey;
@@ -80,24 +87,18 @@ function checkObjectProperty(master, payload, key, hierarchy, nestedKey){
                 checkObjectProperty(newMaster, newPayload, newKey, hierarchy, newNestedKey);
             }
         } 
-    } else if (typeof master[key] === 'string'){
-        if(typeof payload[key] !== 'string'){
-            hierarchy.push(nestedKey + " must be a string");
-            return;
-        } 
-    } else if (typeof master[key] === 'number'){
-        if(typeof payload[key] !== 'number'){
-            hierarchy.push(nestedKey + " must be a number");
-            return;
-        }
-    } else if (typeof master[key] === 'boolean'){
-        if(typeof payload[key] !== 'boolean'){
-            hierarchy.push(nestedKey + " must be a boolean");
-            return;
-        }
+    } else if (isPrimitive(master[key]) &&
+            (typeof master[key] !== typeof payload[key])){
+        hierarchy.push(nestedKey + " must be a "+ typeof master[key]);
+        return;
     }
 }
 
+function isPrimitive(object){
+    var dataType = typeof object;
+    return dataType === "string" || dataType === "number"
+    || dataType === "boolean";
+}
 
 function checkExtraProperties(master, payload, key, hierarchy, nestedKey){
     if(typeof payload[key] === 'undefined'){
@@ -117,10 +118,22 @@ function checkExtraProperties(master, payload, key, hierarchy, nestedKey){
         if (Array.isArray(master[key])){
             master[key].forEach(element => {
                 var newMaster = element; 
+                var newPayload = payload[key][0];        
                 var i=0;
+
+                if(typeof newMaster !== typeof newPayload){
+                    return;
+                }
+
+                if(isPrimitive(newMaster)){
+                    var newKey = i;
+                    var newNestedKey = nestedKey+"["+i+"]";
+                    checkExtraProperties(newMaster, newPayload, newKey, hierarchy, newNestedKey);
+                    return;
+                }
+
                 for(var newKey in newMaster){
                     var newNestedKey = nestedKey+"["+i+"]" +"."+newKey;
-                    var newPayload = payload[key][0];        
                     checkExtraProperties(newMaster, newPayload, newKey, hierarchy, newNestedKey);
                     i++;
                 }  
