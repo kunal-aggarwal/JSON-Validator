@@ -66,9 +66,11 @@ function checkObjectProperty(master, payload, key, hierarchy, nestedKey){
             payload[key].forEach(element => {
                 var newPayload = element; 
 
-                if(isPrimitive(newMaster)  &&
-                (typeof newMaster !== typeof newPayload)){
-                    hierarchy.push(nestedKey +"["+i+"]"  + " must be a "+ typeof newMaster);
+                if(isPrimitive(newMaster)){
+                    if(typeof newMaster !== typeof newPayload){
+                        hierarchy.push(nestedKey +"["+i+"]"  + " must be a "+ typeof newMaster);
+                    }
+                    i++; // In case returned from here, need to increment i here itself;
                     return;
                 }
                 
