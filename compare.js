@@ -45,10 +45,16 @@ async function compare(){
     console.log("\x1b[0m",'done..');     
 }
 
+
+//This function checks if the master has some props that are not present in payload
 function checkObjectProperty(master, payload, key, hierarchy, nestedKey){
     var temp = payload[key]; 
     if(typeof payload[key] === 'undefined'){
         hierarchy.push(nestedKey + " is missing");
+    } else if (isPrimitive(master[key]) &&
+        (typeof master[key] !== typeof payload[key])){
+        hierarchy.push(nestedKey + " must be a "+ typeof master[key]);
+        return;
     } else if (typeof master[key] === 'object'){
         if(typeof payload[key] !== 'object'){
             hierarchy.push(nestedKey + " must be an object");
@@ -70,13 +76,11 @@ function checkObjectProperty(master, payload, key, hierarchy, nestedKey){
                     if(typeof newMaster !== typeof newPayload){
                         hierarchy.push(nestedKey +"["+i+"]"  + " must be a "+ typeof newMaster);
                     }
-                    i++; // In case returned from here, need to increment i here itself;
-                    return;
-                }
-                
-                for(var newKey in newMaster){
-                    var newNestedKey = nestedKey+"["+i+"]" +"."+newKey;
-                    checkObjectProperty(newMaster, newPayload, newKey, hierarchy, newNestedKey);
+                } else{
+                    for(var newKey in newMaster){
+                        var newNestedKey = nestedKey+"["+i+"]" +"."+newKey;
+                        checkObjectProperty(newMaster, newPayload, newKey, hierarchy, newNestedKey);
+                    }
                 }  
                 i++; 
             });
@@ -89,11 +93,7 @@ function checkObjectProperty(master, payload, key, hierarchy, nestedKey){
                 checkObjectProperty(newMaster, newPayload, newKey, hierarchy, newNestedKey);
             }
         } 
-    } else if (isPrimitive(master[key]) &&
-            (typeof master[key] !== typeof payload[key])){
-        hierarchy.push(nestedKey + " must be a "+ typeof master[key]);
-        return;
-    }
+    } 
 }
 
 function isPrimitive(object){
